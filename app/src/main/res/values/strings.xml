@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Chatting App</string>
+    <string name="create">Don\'t have an account ? <u>Create one</u> </string>
+    <string name="sign">Already have an account ? <u>Sign in now</u> </string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="type_here">Type here</string>
+    <string name="welcome">Welcome Back!</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="forgot">Forgot your password ?</string>
+    <string name="no_mess">No message available</string>
+    <string name="no_user_yet">No user yet</string>
+    <string name="log_out">Log Out</string>
+</resources>
