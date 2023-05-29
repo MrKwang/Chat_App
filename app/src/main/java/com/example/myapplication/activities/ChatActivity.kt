@@ -12,12 +12,14 @@ import com.example.myapplication.databinding.ActivityChatBinding
 import com.example.myapplication.model.ChatMessage
 import com.example.myapplication.utilities.Constants
 import com.example.myapplication.utilities.Preference
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.HashMap
 
 class ChatActivity : AppCompatActivity() {
     private lateinit var binding: ActivityChatBinding
@@ -25,6 +27,7 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var database: FirebaseFirestore
     private lateinit var adapter: ChatAdapter
     private var userChatReceive: MutableList<ChatMessage> = mutableListOf()
+    private var conversationId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityChatBinding.inflate(layoutInflater)
@@ -92,6 +95,9 @@ class ChatActivity : AppCompatActivity() {
            adapter.getData(newList.toMutableList())
 
        }
+       if(conversationId == null){
+           fetchRecentlyMessage()
+       }
        loading(false)
    }
 
@@ -125,13 +131,27 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun sendToFireStore(){
-        val date = Calendar.getInstance()
+        val date = Date()
         val message: HashMap<String, Any> = HashMap()
         message[Constants.KEY_SEND_ID] = preferenceManager.getString(Constants.KEY_USER_ID).toString()
         message[Constants.KEY_RECEIVE_ID] = intent.getStringExtra(Constants.KEY_RECEIVE_ID).toString()
         message[Constants.KEY_MESSAGE] = binding.edtInputMessage.text.toString()
-        message[Constants.KEY_TIME] = date.time
+        message[Constants.KEY_TIME] = date
         database.collection(Constants.KEY_COLLECTION_CHAT).add(message)
+
+        if(conversationId != null){
+            updateConversation(binding.edtInputMessage.text.toString())
+        } else {
+
+            val conversation : HashMap<String, Any > = HashMap()
+            conversation[Constants.KEY_SEND_ID] = preferenceManager.getString(Constants.KEY_USER_ID).toString()
+            conversation[Constants.KEY_RECEIVE_ID] = intent.getStringExtra(Constants.KEY_RECEIVE_ID).toString()
+            conversation[Constants.KEY_TIME] = date
+            conversation[Constants.KEY_LAST_MESSAGE] = binding.edtInputMessage.text.toString()
+
+            newConversation(conversation)
+
+        }
         binding.edtInputMessage.text = null
     }
 
@@ -164,6 +184,50 @@ class ChatActivity : AppCompatActivity() {
         {
             binding.progressBar.visibility = View.GONE
             binding.rvChatScreen.visibility = View.VISIBLE
+        }
+    }
+    // Return conversationId if condition is true  --> set value for conversationId
+    private fun fetchRecentlyMessage(){
+        val receiveId = intent.getStringExtra(Constants.KEY_RECEIVE_ID).toString()
+        if(userChatReceive.size > 0){
+            checkConversation(preferenceManager.getString(Constants.KEY_USER_ID).toString(), receiveId)
+            checkConversation( receiveId, preferenceManager.getString(Constants.KEY_USER_ID).toString())
+        }
+    }
+
+    //check if conversation is existed , get id of that conversation
+    private fun checkConversation(sendId: String, receiveId: String){
+        database.collection(Constants.KEY_COLLECTION_CONVERSATION)
+            .whereEqualTo(Constants.KEY_SEND_ID, sendId)
+            .whereEqualTo(Constants.KEY_RECEIVE_ID,receiveId)
+            .get()
+            .addOnCompleteListener(onCompleteListener)
+    }
+
+    //add new conversation to collection
+    private fun newConversation(conversation : HashMap<String, Any>){
+        database.collection(Constants.KEY_COLLECTION_CONVERSATION)
+            .add(conversation)
+            .addOnSuccessListener {
+                conversationId = it.id
+            }
+    }
+
+    private fun updateConversation(message: String ){
+        val date = Date()
+        database.collection(Constants.KEY_COLLECTION_CONVERSATION)
+            .document(conversationId.toString())
+            .update(
+                Constants.KEY_LAST_MESSAGE, message,
+                Constants.KEY_TIME, date
+                )
+
+    }
+
+    private val onCompleteListener : OnCompleteListener<QuerySnapshot> = OnCompleteListener {
+        if(it.isSuccessful && it.result!= null && !it.result.isEmpty){
+            val snapshot = it.result.documents[0]
+            conversationId = snapshot.id
         }
     }
 }

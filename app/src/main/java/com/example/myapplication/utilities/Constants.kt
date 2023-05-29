@@ -16,5 +16,7 @@ class Constants {
         const val KEY_RECEIVE_ID = "receiveId"
         const val KEY_MESSAGE = "message"
         const val KEY_TIME = "time"
+        const val KEY_LAST_MESSAGE = "last_message"
+        const val KEY_COLLECTION_CONVERSATION = "conversation"
     }
 }

@@ -18,7 +18,7 @@ class RecentlyChatAdapter(val list: List<ChatMessage>):
         val binding = ContainerRecentUserItemBinding.bind(view)
         fun setData(chatMessage: ChatMessage){
             binding.tvMessage.text = chatMessage.message
-            binding.imgUser.setImageBitmap(setBitmap(chatMessage.))
+            //binding.imgUser.setImageBitmap(setBitmap(chatMessage.))
         }
     }
 

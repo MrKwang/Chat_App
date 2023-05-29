@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.myapplication.apdapter.ChatAdapter
 import com.example.myapplication.databinding.FragmentMessageBinding
-import com.example.myapplication.model.ChatMessage
+import com.example.myapplication.model.UserList
 import com.example.myapplication.utilities.Preference
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -20,7 +20,7 @@ class MessageFragment : Fragment() {
     private lateinit var preferenceManager: Preference
     private lateinit var database: FirebaseFirestore
     private lateinit var adapter: ChatAdapter
-    private var recentList: MutableList<ChatMessage> = mutableListOf()
+    private var recentList: MutableList<UserList> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,10 +28,9 @@ class MessageFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMessageBinding.inflate(inflater,container, false)
-
         preferenceManager = Preference(requireContext().applicationContext)
         database = FirebaseFirestore.getInstance()
-
+        binding.rvRecentList.adapter = adapter
         return binding.root
     }
 
@@ -45,6 +44,7 @@ class MessageFragment : Fragment() {
 
 
     }
+
 
 
 
