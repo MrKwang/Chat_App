@@ -19,7 +19,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.HashMap
 
 class ChatActivity : AppCompatActivity() {
     private lateinit var binding: ActivityChatBinding
@@ -41,12 +40,13 @@ class ChatActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        init()
         loadMessage()
         setListener()
 
     }
 
-    init{
+   private fun init(){
         binding.rvChatScreen.adapter = adapter
         binding.rvChatScreen.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false)
         binding.rvChatScreen.setHasFixedSize(true)
@@ -144,13 +144,16 @@ class ChatActivity : AppCompatActivity() {
         } else {
 
             val conversation : HashMap<String, Any > = HashMap()
-            conversation[Constants.KEY_SEND_ID] = preferenceManager.getString(Constants.KEY_USER_ID).toString()
-            conversation[Constants.KEY_RECEIVE_ID] = intent.getStringExtra(Constants.KEY_RECEIVE_ID).toString()
+            conversation[Constants.KEY_USER_1_ID] = preferenceManager.getString(Constants.KEY_USER_ID).toString()
+            conversation[Constants.KEY_USER_1_IMAGE] = preferenceManager.getString(Constants.KEY_IMAGE).toString()
+            conversation[Constants.KEY_USER_1_NAME] = preferenceManager.getString(Constants.KEY_NAME).toString()
+            conversation[Constants.KEY_USER_2_ID] = intent.getStringExtra(Constants.KEY_RECEIVE_ID).toString()
+            conversation[Constants.KEY_USER_2_IMAGE] = intent.getStringExtra(Constants.KEY_IMAGE).toString()
+            conversation[Constants.KEY_USER_2_NAME] = intent.getStringExtra(Constants.KEY_NAME).toString()
             conversation[Constants.KEY_TIME] = date
             conversation[Constants.KEY_LAST_MESSAGE] = binding.edtInputMessage.text.toString()
 
             newConversation(conversation)
-
         }
         binding.edtInputMessage.text = null
     }
@@ -190,7 +193,7 @@ class ChatActivity : AppCompatActivity() {
     private fun fetchRecentlyMessage(){
         val receiveId = intent.getStringExtra(Constants.KEY_RECEIVE_ID).toString()
         if(userChatReceive.size > 0){
-            checkConversation(preferenceManager.getString(Constants.KEY_USER_ID).toString(), receiveId)
+            checkConversation(preferenceManager.getString(Constants.KEY_USER_ID).toString(), receiveId)      //2 function return only 1 value for conversationId
             checkConversation( receiveId, preferenceManager.getString(Constants.KEY_USER_ID).toString())
         }
     }

@@ -6,9 +6,9 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.chatapp.interfaces.OnItemCLickListener
 import com.example.myapplication.apdapter.UserListAdapter
 import com.example.myapplication.databinding.ActivityNewMesssageBinding
+import com.example.myapplication.interfaces.OnItemCLickListener
 import com.example.myapplication.model.UserList
 import com.example.myapplication.utilities.Constants
 import com.example.myapplication.utilities.Preference

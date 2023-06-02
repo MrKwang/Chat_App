@@ -18,5 +18,11 @@ class Constants {
         const val KEY_TIME = "time"
         const val KEY_LAST_MESSAGE = "last_message"
         const val KEY_COLLECTION_CONVERSATION = "conversation"
+        const val KEY_USER_1_NAME = "user1_Name"
+        const val KEY_USER_2_NAME = "user2_Name"
+        const val KEY_USER_1_ID = "user1_Id"
+        const val KEY_USER_2_ID = "user2_Id"
+        const val KEY_USER_1_IMAGE = "user1_Image"
+        const val KEY_USER_2_IMAGE = "user2_Image"
     }
 }

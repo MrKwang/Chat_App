@@ -1,8 +1,9 @@
 package com.example.myapplication.model
 
-data class UserList (
+data class RecentlyChatUser(
     var username: String ,
     var image: String ,
     var id: String,
-    var token: String = ""
+    var lastMess: String,
+    var time: String
 )

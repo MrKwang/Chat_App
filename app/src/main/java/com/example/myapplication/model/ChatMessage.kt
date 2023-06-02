@@ -10,8 +10,7 @@ data class ChatMessage (
     var timeStamp: Date,
     var day: String,
     var time: String,
-    var showAva : Boolean = false,
-    var abcde: String = ""
+    var showAva : Boolean = false
    )
 
 

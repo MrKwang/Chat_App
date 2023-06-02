@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.chatapp.interfaces.OnItemCLickListener
+import com.example.myapplication.interfaces.OnItemCLickListener
 import com.example.myapplication.R
 import com.example.myapplication.databinding.ContainerUserItemBinding
 import com.example.myapplication.model.UserList

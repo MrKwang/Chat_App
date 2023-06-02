@@ -8,11 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.example.chatapp.interfaces.OnItemCLickListener
-import com.example.myapplication.R
+import com.example.myapplication.interfaces.OnItemCLickListener
 import com.example.myapplication.activities.ChatActivity
 import com.example.myapplication.apdapter.UserListAdapter
-import com.example.myapplication.databinding.ActivityNewMesssageBinding
 import com.example.myapplication.databinding.FragmentContactBinding
 import com.example.myapplication.model.UserList
 import com.example.myapplication.utilities.Constants
