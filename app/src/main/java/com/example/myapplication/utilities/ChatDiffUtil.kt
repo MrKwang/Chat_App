@@ -3,7 +3,7 @@ package com.example.myapplication.utilities
 import androidx.recyclerview.widget.DiffUtil
 import com.example.myapplication.model.ChatMessage
 
-class MyDiffUtil(
+class ChatDiffUtil(
     private val oldList: List<ChatMessage>,
     private val newList: List<ChatMessage>
 ): DiffUtil.Callback() {

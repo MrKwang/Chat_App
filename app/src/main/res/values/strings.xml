@@ -15,4 +15,5 @@
     <string name="no_mess">No message available</string>
     <string name="no_user_yet">No user yet</string>
     <string name="log_out">Log Out</string>
+    <string name="no_conversation_yet">No conversation yet</string>
 </resources>

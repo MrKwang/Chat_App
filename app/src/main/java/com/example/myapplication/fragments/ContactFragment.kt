@@ -3,15 +3,15 @@ package com.example.myapplication.fragments
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.example.myapplication.interfaces.OnItemCLickListener
+import androidx.fragment.app.Fragment
 import com.example.myapplication.activities.ChatActivity
 import com.example.myapplication.apdapter.UserListAdapter
 import com.example.myapplication.databinding.FragmentContactBinding
+import com.example.myapplication.interfaces.OnItemCLickListener
 import com.example.myapplication.model.UserList
 import com.example.myapplication.utilities.Constants
 import com.example.myapplication.utilities.Preference
@@ -26,7 +26,7 @@ class ContactFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
+
         binding = FragmentContactBinding.inflate(inflater,container,false)
         preferenceManager = Preference(requireContext().applicationContext)
         return binding.root
@@ -52,7 +52,7 @@ class ContactFragment : Fragment() {
                         val name = document.get(Constants.KEY_NAME).toString()
                         val token = document.get(Constants.KEY_FCM_TOKEN).toString()
                         val id = document.id
-                        userList.add(UserList(name,image,token,id))
+                        userList.add(UserList(name,image,id,token))
                     }
                     val adapter = UserListAdapter(userList, object: OnItemCLickListener {
                         override fun onClick(position: Int) {

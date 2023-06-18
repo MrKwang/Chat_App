@@ -201,8 +201,8 @@ class ChatActivity : AppCompatActivity() {
     //check if conversation is existed , get id of that conversation
     private fun checkConversation(sendId: String, receiveId: String){
         database.collection(Constants.KEY_COLLECTION_CONVERSATION)
-            .whereEqualTo(Constants.KEY_SEND_ID, sendId)
-            .whereEqualTo(Constants.KEY_RECEIVE_ID,receiveId)
+            .whereEqualTo(Constants.KEY_USER_1_ID, sendId)
+            .whereEqualTo(Constants.KEY_USER_2_ID,receiveId)
             .get()
             .addOnCompleteListener(onCompleteListener)
     }

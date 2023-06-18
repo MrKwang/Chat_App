@@ -4,22 +4,14 @@ import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.view.marginTop
-import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
 import com.example.myapplication.databinding.ReceivedMessageLayoutBinding
 import com.example.myapplication.databinding.SentMessageLayoutBinding
 import com.example.myapplication.model.ChatMessage
-import com.example.myapplication.utilities.MyDiffUtil
-import com.google.type.DateTime
-import de.hdodenhof.circleimageview.CircleImageView
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
-import java.util.*
+import com.example.myapplication.utilities.ChatDiffUtil
 
 
 class ChatAdapter(private val receivedBitmap: Bitmap, private var list: MutableList<ChatMessage>, private val sendId: String)
@@ -119,7 +111,7 @@ class ChatAdapter(private val receivedBitmap: Bitmap, private var list: MutableL
     }
 
     fun getData(newList: MutableList<ChatMessage>){
-        val diff = MyDiffUtil(list, newList)
+        val diff = ChatDiffUtil(list, newList)
         val diffResult = DiffUtil.calculateDiff(diff)
         list = newList
         diffResult.dispatchUpdatesTo(this)

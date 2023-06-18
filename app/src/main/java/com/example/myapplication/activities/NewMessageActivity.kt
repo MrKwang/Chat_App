@@ -48,7 +48,7 @@ class NewMessageActivity : AppCompatActivity() {
                         val name = document.get(Constants.KEY_NAME).toString()
                         val token = document.get(Constants.KEY_FCM_TOKEN).toString()
                         val id = document.id
-                        userList.add(UserList(name,image,token,id))
+                        userList.add(UserList(name,image,id,token))
                     }
                     val adapter = UserListAdapter(userList, object: OnItemCLickListener {
                         override fun onClick(position: Int) {
