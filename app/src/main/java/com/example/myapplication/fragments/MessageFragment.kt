@@ -50,8 +50,6 @@ class MessageFragment : Fragment() {
         binding.rvRecentList.layoutManager = LinearLayoutManager(activity,LinearLayoutManager.VERTICAL,false)
         binding.rvRecentList.adapter = adapter
         binding.rvRecentList.setHasFixedSize(true)
-
-
     }
 
     private fun fetchData() {
@@ -68,9 +66,11 @@ class MessageFragment : Fragment() {
             return@EventListener
         }
         if(value != null){
-            val newList = mutableListOf<RecentlyChatUser>()
+            var newList: MutableList<RecentlyChatUser> = recentList.toMutableList();
             for (document in value.documentChanges ){
+
                 if(document.type == DocumentChange.Type.ADDED){
+
                     if(document.document.getString(Constants.KEY_USER_1_ID).equals(preferenceManager.getString(Constants.KEY_USER_ID))){
                         val name = document.document.getString(Constants.KEY_USER_2_NAME).toString()
                         val image = document.document.getString(Constants.KEY_USER_2_IMAGE).toString()
@@ -78,6 +78,7 @@ class MessageFragment : Fragment() {
                         val lastMess = document.document.getString(Constants.KEY_LAST_MESSAGE).toString()
                         val time = document.document.getDate(Constants.KEY_TIME)
                         newList.add(RecentlyChatUser(name,image,id,lastMess,time!!))
+
                     } else {
                         val name = document.document.getString(Constants.KEY_USER_1_NAME).toString()
                         val image = document.document.getString(Constants.KEY_USER_1_IMAGE).toString()
@@ -88,28 +89,34 @@ class MessageFragment : Fragment() {
 
                     }
                 } else if(document.type == DocumentChange.Type.MODIFIED){
+
+                    newList = recentList.map { it.copy() } as MutableList<RecentlyChatUser>
                     val user1 = document.document.getString(Constants.KEY_USER_1_ID)
                     val user2 = document.document.getString(Constants.KEY_USER_2_ID)
 
-                    for( i in 1 until recentList.size){
-                        if(recentList[i].id.equals(user1) && recentList[i].id.equals(user2)){
-                            recentList[i].lastMess = document.document.getString(Constants.KEY_LAST_MESSAGE).toString()
-                            recentList[i].time = document.document.getDate(Constants.KEY_TIME)!!
+                    for( i in 0 until newList.size){
+                        if(newList[i].id == user1 || newList[i].id == user2){
+                            newList[i].lastMess = document.document.getString(Constants.KEY_LAST_MESSAGE).toString()
+                            newList[i].time = document.document.getDate(Constants.KEY_TIME)!!
                             break
                         }
                     }
                 }
+
             }
-            adapter.getData(newList)
+
+            newList.sortWith{ o1, o2 -> o2.time.compareTo(o1.time) }
+
+            adapter.updateData(newList)
+
             if(recentList.size >0){
-                recentList.sortWith{o1, o2 -> o1.time.compareTo(o2.time)}
+
                 binding.rvRecentList.visibility = View.VISIBLE;
                 binding.tvNoConv.visibility = View.GONE;
             } else{
                 binding.rvRecentList.visibility = View.GONE;
                 binding.tvNoConv.visibility = View.VISIBLE;
             }
-
 
         }
 

@@ -37,7 +37,7 @@
         app:layout_constraintBottom_toBottomOf="@id/imgUser"
         app:layout_constraintStart_toStartOf="@id/tvUsername"
         app:layout_constraintTop_toBottomOf="@+id/tvUsername" />
-    " />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

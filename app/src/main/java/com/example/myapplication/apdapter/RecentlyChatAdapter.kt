@@ -14,7 +14,7 @@ import com.example.myapplication.model.RecentlyChatUser
 import com.example.myapplication.utilities.RecentChatDiff
 
 
-class RecentlyChatAdapter(private var list: List<RecentlyChatUser>):
+class RecentlyChatAdapter(private var list: MutableList<RecentlyChatUser>):
     RecyclerView.Adapter<RecentlyChatAdapter.CustomViewHolder>() {
 
 
@@ -44,10 +44,14 @@ class RecentlyChatAdapter(private var list: List<RecentlyChatUser>):
         return BitmapFactory.decodeByteArray(decode,0,decode.size)
     }
 
-    fun getData(newList: List<RecentlyChatUser>){
+    fun updateData(newList: List<RecentlyChatUser>){
         val diff = RecentChatDiff(list, newList)
         val calculate = DiffUtil.calculateDiff(diff)
-        list = newList
+        list.clear()
+        list.addAll(newList)
         calculate.dispatchUpdatesTo(this)
+    }
+    fun getUpdatedList(): List<RecentlyChatUser>{
+        return list
     }
 }
