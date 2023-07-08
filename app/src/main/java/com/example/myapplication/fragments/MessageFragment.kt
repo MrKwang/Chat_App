@@ -1,6 +1,7 @@
 package com.example.myapplication.fragments
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,8 +9,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.myapplication.activities.ChatActivity
 import com.example.myapplication.apdapter.RecentlyChatAdapter
 import com.example.myapplication.databinding.FragmentMessageBinding
+import com.example.myapplication.interfaces.OnItemCLickListener
 import com.example.myapplication.model.RecentlyChatUser
 import com.example.myapplication.utilities.Constants
 import com.example.myapplication.utilities.Preference
@@ -17,6 +20,8 @@ import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class MessageFragment : Fragment() {
@@ -41,12 +46,27 @@ class MessageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+        //Search bar chưa dùng
         binding.searchView.setOnClickListener {
             Toast.makeText(activity, "Search something here", Toast.LENGTH_SHORT).show()
 
         }
         fetchData()
-        adapter = RecentlyChatAdapter(recentList)
+        adapter = RecentlyChatAdapter(recentList, object: OnItemCLickListener{
+            override fun onClick(position: Int) {
+                val intent = Intent(requireContext().applicationContext, ChatActivity::class.java)
+                intent.putExtra(Constants.KEY_NAME, recentList[position].username)
+                intent.putExtra(Constants.KEY_RECEIVE_ID, recentList[position].id)
+                intent.putExtra(Constants.KEY_IMAGE, recentList[position].image)
+                startActivity(intent)
+            }
+
+            override fun onLongClick(position: Int): Boolean {
+                Toast.makeText(activity,"Clicked", Toast.LENGTH_LONG).show()
+                return true
+            }
+        })
         binding.rvRecentList.layoutManager = LinearLayoutManager(activity,LinearLayoutManager.VERTICAL,false)
         binding.rvRecentList.adapter = adapter
         binding.rvRecentList.setHasFixedSize(true)
@@ -76,16 +96,24 @@ class MessageFragment : Fragment() {
                         val image = document.document.getString(Constants.KEY_USER_2_IMAGE).toString()
                         val id = document.document.getString(Constants.KEY_USER_2_ID).toString()
                         val lastMess = document.document.getString(Constants.KEY_LAST_MESSAGE).toString()
-                        val time = document.document.getDate(Constants.KEY_TIME)
-                        newList.add(RecentlyChatUser(name,image,id,lastMess,time!!))
+                        val timeStamp= document.document.getDate(Constants.KEY_TIME)
+
+                        if (timeStamp != null) {
+                            newList.add(RecentlyChatUser(name,image,id,lastMess,
+                                timeStamp, setSendTime(timeStamp)))
+                        }
 
                     } else {
                         val name = document.document.getString(Constants.KEY_USER_1_NAME).toString()
                         val image = document.document.getString(Constants.KEY_USER_1_IMAGE).toString()
                         val id = document.document.getString(Constants.KEY_USER_1_ID).toString()
                         val lastMess = document.document.getString(Constants.KEY_LAST_MESSAGE).toString()
-                        val time = document.document.getDate(Constants.KEY_TIME)
-                        newList.add(RecentlyChatUser(name,image,id,lastMess,time!!))
+                        val timeStamp = document.document.getDate(Constants.KEY_TIME)
+                        if (timeStamp != null) {
+                            newList.add(RecentlyChatUser(name,image,id,lastMess,
+                                timeStamp, setSendTime(timeStamp)))
+                        }
+
 
                     }
                 } else if(document.type == DocumentChange.Type.MODIFIED){
@@ -98,6 +126,7 @@ class MessageFragment : Fragment() {
                         if(newList[i].id == user1 || newList[i].id == user2){
                             newList[i].lastMess = document.document.getString(Constants.KEY_LAST_MESSAGE).toString()
                             newList[i].time = document.document.getDate(Constants.KEY_TIME)!!
+                            newList[i].sendTime = setSendTime(newList[i].time)
                             break
                         }
                     }
@@ -122,4 +151,13 @@ class MessageFragment : Fragment() {
 
     }
 
+    private fun setSendTime(timeStamp: Date): String {
+
+        var sentTime = if(System.currentTimeMillis() - timeStamp.time <= 23*3600*1000){
+            SimpleDateFormat("HH:mm", Locale.getDefault()).format(timeStamp)
+        } else{
+            SimpleDateFormat("EEE", Locale.getDefault()).format(timeStamp)
+        }
+        return  sentTime
+    }
 }

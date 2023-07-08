@@ -24,5 +24,6 @@ class Constants {
         const val KEY_USER_2_ID = "user2_Id"
         const val KEY_USER_1_IMAGE = "user1_Image"
         const val KEY_USER_2_IMAGE = "user2_Image"
+        const val KEY_AVAILABILITY = "availability"
     }
 }

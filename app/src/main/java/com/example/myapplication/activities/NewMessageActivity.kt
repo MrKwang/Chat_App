@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.example.myapplication.apdapter.UserListAdapter
 import com.example.myapplication.databinding.ActivityNewMesssageBinding
 import com.example.myapplication.interfaces.OnItemCLickListener
@@ -17,7 +16,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 @SuppressLint("StaticFieldLeak")
 private lateinit var binding: ActivityNewMesssageBinding
 private lateinit var preferenceManager: Preference
-class NewMessageActivity : AppCompatActivity() {
+class NewMessageActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityNewMesssageBinding.inflate(layoutInflater)
         preferenceManager = Preference(applicationContext)
@@ -59,6 +58,10 @@ class NewMessageActivity : AppCompatActivity() {
                             intent.putExtra(Constants.KEY_FCM_TOKEN, userList[position].token)
                             startActivity(intent)
                             finish()
+                        }
+
+                        override fun onLongClick(position: Int): Boolean {
+                            TODO("Not yet implemented")
                         }
                     })
                     binding.rvUserList.adapter = adapter

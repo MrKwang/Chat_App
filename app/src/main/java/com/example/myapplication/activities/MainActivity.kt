@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.util.Base64
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.example.myapplication.animations.ZoomOutPageTransformer
 import com.example.myapplication.apdapter.ViewPagerAdapter
@@ -22,7 +21,7 @@ import kotlin.system.exitProcess
 @SuppressLint("StaticFieldLeak")
 private lateinit var binding: ActivityMainBinding
 private lateinit var preferenceManager: Preference
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         binding  = ActivityMainBinding.inflate(layoutInflater)
         preferenceManager = Preference(applicationContext)

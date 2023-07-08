@@ -5,7 +5,6 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Base64
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.apdapter.ChatAdapter
 import com.example.myapplication.databinding.ActivityChatBinding
@@ -20,7 +19,7 @@ import com.google.firebase.firestore.QuerySnapshot
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ChatActivity : AppCompatActivity() {
+class ChatActivity : BaseActivity() {
     private lateinit var binding: ActivityChatBinding
     private lateinit var preferenceManager: Preference
     private lateinit var database: FirebaseFirestore
@@ -85,8 +84,6 @@ class ChatActivity : AppCompatActivity() {
                binding.tvNoMessage.visibility = View.GONE
            }
 
-
-
            val newList = userChatReceive.mapIndexed { index, chatMessage ->
                val nextMessage = userChatReceive.getOrNull(index + 1)
                chatMessage.copy(showAva = shouldShowAvatar(nextMessage,chatMessage))
@@ -135,7 +132,7 @@ class ChatActivity : AppCompatActivity() {
         val message: HashMap<String, Any> = HashMap()
         message[Constants.KEY_SEND_ID] = preferenceManager.getString(Constants.KEY_USER_ID).toString()
         message[Constants.KEY_RECEIVE_ID] = intent.getStringExtra(Constants.KEY_RECEIVE_ID).toString()
-        message[Constants.KEY_MESSAGE] = binding.edtInputMessage.text.toString()
+        message[Constants.KEY_MESSAGE] = binding.edtInputMessage.text.trimEnd().toString()
         message[Constants.KEY_TIME] = date
         database.collection(Constants.KEY_COLLECTION_CHAT).add(message)
 

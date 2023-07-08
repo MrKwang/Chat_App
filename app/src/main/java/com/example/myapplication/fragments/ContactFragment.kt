@@ -64,6 +64,10 @@ class ContactFragment : Fragment() {
                             startActivity(intent)
 
                         }
+
+                        override fun onLongClick(position: Int): Boolean {
+                            TODO("Not yet implemented")
+                        }
                     })
                     binding.rvUserList.adapter = adapter
                     binding.rvUserList.setHasFixedSize(true)

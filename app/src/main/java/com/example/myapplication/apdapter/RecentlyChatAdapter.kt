@@ -10,11 +10,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
 import com.example.myapplication.databinding.ContainerRecentUserItemBinding
+import com.example.myapplication.interfaces.OnItemCLickListener
 import com.example.myapplication.model.RecentlyChatUser
 import com.example.myapplication.utilities.RecentChatDiff
 
 
-class RecentlyChatAdapter(private var list: MutableList<RecentlyChatUser>):
+class RecentlyChatAdapter(private var list: MutableList<RecentlyChatUser>, private val mItemClick: OnItemCLickListener):
     RecyclerView.Adapter<RecentlyChatAdapter.CustomViewHolder>() {
 
 
@@ -24,6 +25,7 @@ class RecentlyChatAdapter(private var list: MutableList<RecentlyChatUser>):
             binding.tvMessage.text = recentlyChatUser.lastMess
             binding.imgUser.setImageBitmap(setBitmap(recentlyChatUser.image))
             binding.tvUsername.text = recentlyChatUser.username
+            binding.tvTime.text = recentlyChatUser.sendTime
         }
     }
 
@@ -38,6 +40,8 @@ class RecentlyChatAdapter(private var list: MutableList<RecentlyChatUser>):
 
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
         holder.setData(list[position])
+        holder.itemView.setOnClickListener{ mItemClick.onClick(position)}
+        holder.itemView.setOnLongClickListener { mItemClick.onLongClick(position) }
     }
     private fun setBitmap(img: String): Bitmap{
         val decode = Base64.decode(img, Base64.DEFAULT )
