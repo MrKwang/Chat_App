@@ -1,11 +1,12 @@
 package com.example.myapplication.activities
 
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Base64
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.myapplication.R
 import com.example.myapplication.apdapter.ChatAdapter
 import com.example.myapplication.databinding.ActivityChatBinding
 import com.example.myapplication.model.ChatMessage
@@ -26,6 +27,7 @@ class ChatActivity : BaseActivity() {
     private lateinit var adapter: ChatAdapter
     private var userChatReceive: MutableList<ChatMessage> = mutableListOf()
     private var conversationId: String? = null
+    private var isUserOnline = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityChatBinding.inflate(layoutInflater)
@@ -229,5 +231,32 @@ class ChatActivity : BaseActivity() {
             val snapshot = it.result.documents[0]
             conversationId = snapshot.id
         }
+    }
+
+    private fun listenAvailability() {
+        val receiverId = intent.getStringExtra(Constants.KEY_RECEIVE_ID).toString()
+        database.collection(Constants.KEY_COLLECTION_USERS).document(receiverId)
+            .addSnapshotListener(this@ChatActivity, EventListener { value, error ->
+                if(error != null){
+                    return@EventListener
+                }
+
+                if(value != null){
+                    if (value.get(Constants.KEY_AVAILABILITY) != null){
+                        val availability = value.getLong(Constants.KEY_AVAILABILITY)?.toInt()
+                        isUserOnline = availability == 1
+                    }
+                }
+            })
+
+        if(isUserOnline){
+            binding.availability.setText(R.string.online)
+        } else
+            binding.availability.setText(R.string.offline)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        listenAvailability()
     }
 }

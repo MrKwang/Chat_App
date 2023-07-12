@@ -12,7 +12,9 @@ class MessagingService: FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
+        if(message.data.isNotEmpty()){
 
+        }
 
     }
 
