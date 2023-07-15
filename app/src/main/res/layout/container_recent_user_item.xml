@@ -8,9 +8,9 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imgUser"
-        android:layout_marginStart="@dimen/_8sdp"
         android:layout_width="@dimen/_47sdp"
         android:layout_height="@dimen/_47sdp"
+        android:layout_marginStart="@dimen/_8sdp"
         android:background="@drawable/background_image"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -31,9 +31,9 @@
         android:id="@+id/tvMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxLines="1"
-        android:maxEms="10"
         android:ellipsize="end"
+        android:maxEms="10"
+        android:maxLines="1"
         android:text="Recent "
         android:textColor="@color/gray"
         android:textSize="@dimen/_13ssp"
@@ -45,13 +45,12 @@
         android:id="@+id/tvTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_10sdp"
         android:text="00:00"
         android:textColor="@color/gray"
         android:textSize="@dimen/_10ssp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tvMessage"
         app:layout_constraintBottom_toBottomOf="@+id/tvMessage"
-        app:layout_constraintStart_toEndOf="@id/tvMessage"
-         />
+        app:layout_constraintEnd_toEndOf="@+id/tvUsername" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

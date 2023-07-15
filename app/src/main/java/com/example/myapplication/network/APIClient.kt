@@ -8,7 +8,7 @@ class APIClient {
     fun getClient(): Retrofit? {
         if (retrofit == null){
             retrofit = Retrofit.Builder()
-                .baseUrl("https://fcm.googleapis.com/fcm/send")
+                .baseUrl("//fcm.googleapis.com/v1/projects/chat-app-f7584/messages:send)")
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build()
         }

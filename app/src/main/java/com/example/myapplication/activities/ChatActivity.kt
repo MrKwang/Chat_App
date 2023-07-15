@@ -151,7 +151,6 @@ class ChatActivity : BaseActivity() {
             conversation[Constants.KEY_USER_2_NAME] = intent.getStringExtra(Constants.KEY_NAME).toString()
             conversation[Constants.KEY_TIME] = date
             conversation[Constants.KEY_LAST_MESSAGE] = binding.edtInputMessage.text.toString()
-
             newConversation(conversation)
         }
         binding.edtInputMessage.text = null

@@ -25,5 +25,17 @@ class Constants {
         const val KEY_USER_1_IMAGE = "user1_Image"
         const val KEY_USER_2_IMAGE = "user2_Image"
         const val KEY_AVAILABILITY = "availability"
+        const val REMOTE_MSG_AUTHORIZATION = "Authorization"
+        const val REMOTE_MSG_CONTENT_TYPE = "Content-type"
+
     }
+
+    var remoteMsgHeaders: HashMap<String, String>? = null
+    fun getRemoteMsgHeaders(){
+        if(remoteMsgHeaders == null){
+            remoteMsgHeaders?.set(REMOTE_MSG_AUTHORIZATION, "Bearer ")
+            remoteMsgHeaders?.set(REMOTE_MSG_CONTENT_TYPE, "application/json")
+        }
+    }
+
 }
