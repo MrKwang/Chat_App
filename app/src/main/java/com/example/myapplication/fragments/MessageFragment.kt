@@ -59,6 +59,7 @@ class MessageFragment : Fragment() {
                 intent.putExtra(Constants.KEY_NAME, recentList[position].username)
                 intent.putExtra(Constants.KEY_RECEIVE_ID, recentList[position].id)
                 intent.putExtra(Constants.KEY_IMAGE, recentList[position].image)
+                intent.putExtra(Constants.KEY_FCM_TOKEN, recentList[position].token)
                 startActivity(intent)
             }
 
@@ -97,10 +98,10 @@ class MessageFragment : Fragment() {
                         val id = document.document.getString(Constants.KEY_USER_2_ID).toString()
                         val lastMess = document.document.getString(Constants.KEY_LAST_MESSAGE).toString()
                         val timeStamp= document.document.getDate(Constants.KEY_TIME)
-
+                        val token = document.document.getString(Constants.KEY_USER_2_TOKEN).toString()
                         if (timeStamp != null) {
                             newList.add(RecentlyChatUser(name,image,id,lastMess,
-                                timeStamp, setSendTime(timeStamp)))
+                                timeStamp, setSendTime(timeStamp), token))
                         }
 
                     } else {
@@ -109,9 +110,10 @@ class MessageFragment : Fragment() {
                         val id = document.document.getString(Constants.KEY_USER_1_ID).toString()
                         val lastMess = document.document.getString(Constants.KEY_LAST_MESSAGE).toString()
                         val timeStamp = document.document.getDate(Constants.KEY_TIME)
+                        val token = document.document.getString(Constants.KEY_USER_1_TOKEN).toString()
                         if (timeStamp != null) {
                             newList.add(RecentlyChatUser(name,image,id,lastMess,
-                                timeStamp, setSendTime(timeStamp)))
+                                timeStamp, setSendTime(timeStamp),token))
                         }
 
 

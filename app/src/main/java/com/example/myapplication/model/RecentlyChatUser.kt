@@ -8,5 +8,6 @@ data class RecentlyChatUser(
     var id: String,
     var lastMess: String,
     var time: Date,
-    var sendTime: String
+    var sendTime: String,
+    var token: String
 )

@@ -110,6 +110,8 @@ class MainActivity : BaseActivity() {
         val documentReference =  database.collection(Constants.KEY_COLLECTION_USERS).document(
             preferenceManager.getString(Constants.KEY_USER_ID).toString()
         )
+
+        preferenceManager.putString(Constants.KEY_FCM_TOKEN, token)
         documentReference.update(Constants.KEY_FCM_TOKEN,token)
             .addOnSuccessListener {
                 Toast.makeText(this@MainActivity, "Token updated", Toast.LENGTH_SHORT).show()

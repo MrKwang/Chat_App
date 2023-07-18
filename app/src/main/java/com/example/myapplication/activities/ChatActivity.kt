@@ -1,15 +1,18 @@
 package com.example.myapplication.activities
 
 import android.graphics.Bitmap
- import android.graphics.BitmapFactory
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Base64
 import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.R
 import com.example.myapplication.apdapter.ChatAdapter
 import com.example.myapplication.databinding.ActivityChatBinding
+import com.example.myapplication.interfaces.APIService
 import com.example.myapplication.model.ChatMessage
+import com.example.myapplication.network.APIClient
 import com.example.myapplication.utilities.Constants
 import com.example.myapplication.utilities.Preference
 import com.google.android.gms.tasks.OnCompleteListener
@@ -17,6 +20,12 @@ import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
+import org.json.JSONArray
+import org.json.JSONException
+import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -60,7 +69,6 @@ class ChatActivity : BaseActivity() {
 
    private val eventListener: EventListener<QuerySnapshot> = EventListener { value, error ->
        if(error != null) {
-
            return@EventListener
        }
        if(value != null){
@@ -129,6 +137,40 @@ class ChatActivity : BaseActivity() {
 
     }
 
+    private fun showToast(message: String){
+        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT)
+            .show()    }
+    private fun sendNotification(body: String){
+
+        APIClient.getClient().create(APIService::class.java)
+            .sendMessage(Constants.getRemoteHeaders(),  body)
+            .enqueue(object : Callback<String>{
+                override fun onResponse(call: Call<String>, response: Response<String>) {
+                    showToast("onResponse")
+                    if (response.isSuccessful){
+                        try {
+                            if (!response.body().isNullOrEmpty()){
+                                val responseJson = JSONObject(response.body().toString())
+                                val result = responseJson.getJSONArray("results")
+                                if(responseJson.getInt("failure") == 1){
+                                    val error = result.get(0) as JSONObject
+                                    showToast("Error1 " + error.getString("error").toString())
+                                }
+                            }
+                        } catch (e: JSONException){
+                            e.printStackTrace()
+                        }
+                        showToast("Sent successfully")
+                    } else showToast("Error2 " + response.code())
+                }
+
+                override fun onFailure(call: Call<String>, t: Throwable) {
+                    showToast("Error3 " + t.message.toString())
+                }
+
+            })
+    }
+
     private fun sendToFireStore(){
         val date = Date()
         val message: HashMap<String, Any> = HashMap()
@@ -146,12 +188,35 @@ class ChatActivity : BaseActivity() {
             conversation[Constants.KEY_USER_1_ID] = preferenceManager.getString(Constants.KEY_USER_ID).toString()
             conversation[Constants.KEY_USER_1_IMAGE] = preferenceManager.getString(Constants.KEY_IMAGE).toString()
             conversation[Constants.KEY_USER_1_NAME] = preferenceManager.getString(Constants.KEY_NAME).toString()
+            conversation[Constants.KEY_USER_1_TOKEN] = preferenceManager.getString(Constants.KEY_FCM_TOKEN).toString()
             conversation[Constants.KEY_USER_2_ID] = intent.getStringExtra(Constants.KEY_RECEIVE_ID).toString()
             conversation[Constants.KEY_USER_2_IMAGE] = intent.getStringExtra(Constants.KEY_IMAGE).toString()
             conversation[Constants.KEY_USER_2_NAME] = intent.getStringExtra(Constants.KEY_NAME).toString()
+            conversation[Constants.KEY_USER_2_TOKEN] = intent.getStringExtra(Constants.KEY_FCM_TOKEN).toString()
             conversation[Constants.KEY_TIME] = date
             conversation[Constants.KEY_LAST_MESSAGE] = binding.edtInputMessage.text.toString()
             newConversation(conversation)
+        }
+
+        if(!isUserOnline){
+            try {
+                val tokens = JSONArray()
+                tokens.put(intent.getStringExtra(Constants.KEY_FCM_TOKEN))
+
+                val data = JSONObject()
+                data.put(Constants.KEY_NAME, preferenceManager.getString(Constants.KEY_NAME))
+                data.put(Constants.KEY_USER_ID, preferenceManager.getString(Constants.KEY_USER_ID))
+                data.put(Constants.KEY_FCM_TOKEN, preferenceManager.getString(Constants.KEY_FCM_TOKEN))
+                data.put(Constants.KEY_MESSAGE, binding.edtInputMessage.text.toString())
+
+                val body = JSONObject()
+                body.put(Constants.REMOTE_MSG_DATA, data)
+                body.put(Constants.REMOTE_MSG_REGISTRATION_IDS, tokens)
+
+                sendNotification(body.toString())
+            } catch (e: Exception){
+                showToast( e.message.toString() )
+            }
         }
         binding.edtInputMessage.text = null
     }
@@ -243,15 +308,17 @@ class ChatActivity : BaseActivity() {
                 if(value != null){
                     if (value.get(Constants.KEY_AVAILABILITY) != null){
                         val availability = value.getLong(Constants.KEY_AVAILABILITY)?.toInt()
-                        isUserOnline = availability == 1
+                        isUserOnline =  availability == 1
                     }
                 }
+
+                if(isUserOnline){
+                    binding.availability.setText(R.string.online)
+                } else
+                    binding.availability.setText(R.string.offline)
             })
 
-        if(isUserOnline){
-            binding.availability.setText(R.string.online)
-        } else
-            binding.availability.setText(R.string.offline)
+
     }
 
     override fun onResume() {
