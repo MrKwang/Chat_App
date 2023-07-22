@@ -1,9 +1,11 @@
 package com.example.myapplication.activities
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Base64
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,34 +39,38 @@ class ChatActivity : BaseActivity() {
     private var userChatReceive: MutableList<ChatMessage> = mutableListOf()
     private var conversationId: String? = null
     private var isUserOnline = false
-
+    private var imageUser: Bitmap? = null
+    private lateinit var receiveId: String
     override fun onCreate(savedInstanceState: Bundle?) {
-        binding = ActivityChatBinding.inflate(layoutInflater)
         preferenceManager = Preference(applicationContext)
         database = FirebaseFirestore.getInstance()
+        binding = ActivityChatBinding.inflate(layoutInflater)
+        super.onCreate(savedInstanceState)
+        setContentView(binding.root)
+
+        receiveId = intent.extras?.getString(Constants.KEY_USER_ID)
+            ?: intent.getStringExtra(Constants.KEY_RECEIVE_ID).toString()
+        imageUser = getBitmap(intent.getStringExtra(Constants.KEY_IMAGE).toString())
+
         adapter = ChatAdapter(
-            getBitmap(intent.getStringExtra(Constants.KEY_IMAGE).toString()),
+            imageUser,
             userChatReceive,
             preferenceManager.getString(Constants.KEY_USER_ID).toString()
         )
-
-        super.onCreate(savedInstanceState)
-        setContentView(binding.root)
-        init()
+        initView()
         loadMessage()
         setListener()
-
     }
 
-   private fun init(){
+   private fun initView(){
+
         binding.rvChatScreen.adapter = adapter
         binding.rvChatScreen.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false)
         binding.rvChatScreen.setHasFixedSize(true)
         (binding.rvChatScreen.layoutManager as LinearLayoutManager).stackFromEnd =  true
+        if(imageUser != null) binding.imgChatUser.setImageBitmap(imageUser)
+        binding.tvUsername.text = intent.extras?.getString(Constants.KEY_NAME) ?: intent.getStringExtra(Constants.KEY_NAME)
 
-        val bitmap = getBitmap(intent.getStringExtra(Constants.KEY_IMAGE).toString())
-        binding.imgChatUser.setImageBitmap(bitmap)
-        binding.tvUsername.text = intent.getStringExtra(Constants.KEY_NAME)
     }
 
    private val eventListener: EventListener<QuerySnapshot> = EventListener { value, error ->
@@ -125,13 +131,14 @@ class ChatActivity : BaseActivity() {
 
     private fun loadMessage(){
         loading(true)
+
         database.collection(Constants.KEY_COLLECTION_CHAT)
             .whereEqualTo(Constants.KEY_SEND_ID, preferenceManager.getString(Constants.KEY_USER_ID))
-            .whereEqualTo(Constants.KEY_RECEIVE_ID,intent.getStringExtra(Constants.KEY_RECEIVE_ID))
+            .whereEqualTo(Constants.KEY_RECEIVE_ID,receiveId)
             .addSnapshotListener(eventListener)
         database.collection(Constants.KEY_COLLECTION_CHAT)
             .whereEqualTo(Constants.KEY_RECEIVE_ID, preferenceManager.getString(Constants.KEY_USER_ID))
-            .whereEqualTo(Constants.KEY_SEND_ID, intent.getStringExtra(Constants.KEY_RECEIVE_ID))
+            .whereEqualTo(Constants.KEY_SEND_ID, receiveId)
             .addSnapshotListener(eventListener)
 
 
@@ -146,26 +153,26 @@ class ChatActivity : BaseActivity() {
             .sendMessage(Constants.getRemoteHeaders(),  body)
             .enqueue(object : Callback<String>{
                 override fun onResponse(call: Call<String>, response: Response<String>) {
-                    showToast("onResponse")
                     if (response.isSuccessful){
                         try {
                             if (!response.body().isNullOrEmpty()){
                                 val responseJson = JSONObject(response.body().toString())
+                                Log.e("FCM Token", "${response.body()} \n $body")
                                 val result = responseJson.getJSONArray("results")
                                 if(responseJson.getInt("failure") == 1){
                                     val error = result.get(0) as JSONObject
-                                    showToast("Error1 " + error.getString("error").toString())
+                                    showToast("Error " + error.getString("error").toString())
                                 }
                             }
                         } catch (e: JSONException){
                             e.printStackTrace()
                         }
                         showToast("Sent successfully")
-                    } else showToast("Error2 " + response.code())
+                    } else showToast("Response " + response.code())
                 }
 
                 override fun onFailure(call: Call<String>, t: Throwable) {
-                    showToast("Error3 " + t.message.toString())
+                    showToast("onFailure " + t.message.toString())
                 }
 
             })
@@ -175,7 +182,7 @@ class ChatActivity : BaseActivity() {
         val date = Date()
         val message: HashMap<String, Any> = HashMap()
         message[Constants.KEY_SEND_ID] = preferenceManager.getString(Constants.KEY_USER_ID).toString()
-        message[Constants.KEY_RECEIVE_ID] = intent.getStringExtra(Constants.KEY_RECEIVE_ID).toString()
+        message[Constants.KEY_RECEIVE_ID] = receiveId
         message[Constants.KEY_MESSAGE] = binding.edtInputMessage.text.trimEnd().toString()
         message[Constants.KEY_TIME] = date
         database.collection(Constants.KEY_COLLECTION_CHAT).add(message)
@@ -189,10 +196,10 @@ class ChatActivity : BaseActivity() {
             conversation[Constants.KEY_USER_1_IMAGE] = preferenceManager.getString(Constants.KEY_IMAGE).toString()
             conversation[Constants.KEY_USER_1_NAME] = preferenceManager.getString(Constants.KEY_NAME).toString()
             conversation[Constants.KEY_USER_1_TOKEN] = preferenceManager.getString(Constants.KEY_FCM_TOKEN).toString()
-            conversation[Constants.KEY_USER_2_ID] = intent.getStringExtra(Constants.KEY_RECEIVE_ID).toString()
+            conversation[Constants.KEY_USER_2_ID] = receiveId
             conversation[Constants.KEY_USER_2_IMAGE] = intent.getStringExtra(Constants.KEY_IMAGE).toString()
-            conversation[Constants.KEY_USER_2_NAME] = intent.getStringExtra(Constants.KEY_NAME).toString()
-            conversation[Constants.KEY_USER_2_TOKEN] = intent.getStringExtra(Constants.KEY_FCM_TOKEN).toString()
+            conversation[Constants.KEY_USER_2_NAME] =  intent.extras?.getString(Constants.KEY_NAME) ?: intent.getStringExtra(Constants.KEY_NAME).toString()
+            conversation[Constants.KEY_USER_2_TOKEN] = intent.extras?.getString(Constants.KEY_FCM_TOKEN) ?: intent.getStringExtra(Constants.KEY_FCM_TOKEN).toString()
             conversation[Constants.KEY_TIME] = date
             conversation[Constants.KEY_LAST_MESSAGE] = binding.edtInputMessage.text.toString()
             newConversation(conversation)
@@ -208,7 +215,6 @@ class ChatActivity : BaseActivity() {
                 data.put(Constants.KEY_USER_ID, preferenceManager.getString(Constants.KEY_USER_ID))
                 data.put(Constants.KEY_FCM_TOKEN, preferenceManager.getString(Constants.KEY_FCM_TOKEN))
                 data.put(Constants.KEY_MESSAGE, binding.edtInputMessage.text.toString())
-
                 val body = JSONObject()
                 body.put(Constants.REMOTE_MSG_DATA, data)
                 body.put(Constants.REMOTE_MSG_REGISTRATION_IDS, tokens)
@@ -218,6 +224,7 @@ class ChatActivity : BaseActivity() {
                 showToast( e.message.toString() )
             }
         }
+
         binding.edtInputMessage.text = null
     }
 
@@ -236,9 +243,11 @@ class ChatActivity : BaseActivity() {
     }
 
 
-    private fun getBitmap(img: String): Bitmap {
-        val bytes = Base64.decode(img, Base64.DEFAULT)
-        return BitmapFactory.decodeByteArray(bytes,0, bytes.size)
+    private fun getBitmap(img: String?): Bitmap? {
+        return if(img != null){
+            val bytes = Base64.decode(img, Base64.DEFAULT)
+            BitmapFactory.decodeByteArray(bytes,0, bytes.size)
+        } else null
     }
 
     private fun loading(state: Boolean){
@@ -254,7 +263,6 @@ class ChatActivity : BaseActivity() {
     }
     // Return conversationId if condition is true  --> set value for conversationId
     private fun fetchRecentlyMessage(){
-        val receiveId = intent.getStringExtra(Constants.KEY_RECEIVE_ID).toString()
         if(userChatReceive.size > 0){
             checkConversation(preferenceManager.getString(Constants.KEY_USER_ID).toString(), receiveId)      //2 function return only 1 value for conversationId
             checkConversation( receiveId, preferenceManager.getString(Constants.KEY_USER_ID).toString())
@@ -298,8 +306,8 @@ class ChatActivity : BaseActivity() {
     }
 
     private fun listenAvailability() {
-        val receiverId = intent.getStringExtra(Constants.KEY_RECEIVE_ID).toString()
-        database.collection(Constants.KEY_COLLECTION_USERS).document(receiverId)
+
+        database.collection(Constants.KEY_COLLECTION_USERS).document(receiveId)
             .addSnapshotListener(this@ChatActivity, EventListener { value, error ->
                 if(error != null){
                     return@EventListener
@@ -309,6 +317,14 @@ class ChatActivity : BaseActivity() {
                     if (value.get(Constants.KEY_AVAILABILITY) != null){
                         val availability = value.getLong(Constants.KEY_AVAILABILITY)?.toInt()
                         isUserOnline =  availability == 1
+                    }
+                    if(imageUser == null){
+                        imageUser = getBitmap(value.getString(Constants.KEY_IMAGE))
+                        imageUser?.let {
+                            adapter.setReceivedBitmap(it)
+                            binding.imgChatUser.setImageBitmap(it)
+                        }
+                        adapter.notifyItemRangeChanged(0, userChatReceive.size)
                     }
                 }
 
@@ -324,5 +340,15 @@ class ChatActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         listenAvailability()
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        Toast.makeText(this, "onNewIntent", Toast.LENGTH_SHORT).show()
+        if(intent != null && intent.hasExtra(Constants.KEY_USER_ID)){
+            Log.d("NEW INTENT", Constants.KEY_USER_ID)
+        } else
+            Log.d("NEW INTENT", "null")
+
     }
 }

@@ -14,7 +14,7 @@ import com.example.myapplication.model.ChatMessage
 import com.example.myapplication.utilities.ChatDiffUtil
 
 
-class ChatAdapter(private val receivedBitmap: Bitmap, private var list: MutableList<ChatMessage>, private val sendId: String)
+class ChatAdapter(private var receivedBitmap: Bitmap?, private var list: MutableList<ChatMessage>, private val sendId: String)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val VIEW_TYPE_SENT = 1
@@ -35,11 +35,13 @@ class ChatAdapter(private val receivedBitmap: Bitmap, private var list: MutableL
     inner class ReceivedMessageViewHolder(item: View): RecyclerView.ViewHolder(item){
         private val binding = ReceivedMessageLayoutBinding.bind(item)
 
-        fun setMessageReceiveData( chatMessage: ChatMessage,image: Bitmap){
+        fun setMessageReceiveData( chatMessage: ChatMessage,image: Bitmap?){
 
             binding.tvReceived.text = chatMessage.message
             binding.tvTime.text = chatMessage.time
-            binding.imgUserChat.setImageBitmap(image)
+            if(image != null){
+                binding.imgUserChat.setImageBitmap(image)
+            }
             binding.tvDay.text = chatMessage.day
 
             if(chatMessage.showAva) binding.imgUserChat.visibility = View.VISIBLE else binding.imgUserChat.visibility = View.INVISIBLE
@@ -115,6 +117,10 @@ class ChatAdapter(private val receivedBitmap: Bitmap, private var list: MutableL
         val diffResult = DiffUtil.calculateDiff(diff)
         list = newList
         diffResult.dispatchUpdatesTo(this)
+    }
+
+    fun setReceivedBitmap(image: Bitmap){
+        receivedBitmap = image
     }
 
     private fun dpToPx(dp: Int, view: View): Int{

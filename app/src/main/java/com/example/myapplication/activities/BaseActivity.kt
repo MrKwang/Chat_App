@@ -28,6 +28,5 @@ open class BaseActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         documentReference.update(Constants.KEY_AVAILABILITY, 0)
-
     }
 }
