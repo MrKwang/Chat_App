@@ -10,7 +10,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -38,7 +37,7 @@ class MessagingService: FirebaseMessagingService() {
             val token = message.data[Constants.KEY_FCM_TOKEN].toString()
 
             bundle.putString(Constants.KEY_NAME, name)
-            bundle.putString(Constants.KEY_USER_ID, id)
+            bundle.putString(Constants.KEY_RECEIVE_ID, id)
             bundle.putString(Constants.KEY_FCM_TOKEN, token)
             val channelId = "chat_message"
 
@@ -46,12 +45,11 @@ class MessagingService: FirebaseMessagingService() {
             val intent = Intent(this, ChatActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             intent.putExtras(bundle)
-            intent.action = Intent.ACTION_PICK_ACTIVITY
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
                 val builder = NotificationCompat.Builder(this, channelId)
-                builder.setSmallIcon(R.drawable.round_notifications_active_24)
+                builder.setSmallIcon(R.drawable.app_logo)
                 builder.setContentTitle(name)
                 builder.setContentText(message.data[Constants.KEY_MESSAGE])
                 builder.setContentIntent(pendingIntent)
@@ -66,9 +64,9 @@ class MessagingService: FirebaseMessagingService() {
                 }
 
                 val notificationManagerCompat = NotificationManagerCompat.from(this)
+
                 if (ActivityCompat.checkSelfPermission(
-                        this,
-                        Manifest.permission.POST_NOTIFICATIONS
+                        this, Manifest.permission.POST_NOTIFICATIONS
                     ) != PackageManager.PERMISSION_GRANTED
                 ) {
                     // TODO: Consider calling
@@ -78,9 +76,8 @@ class MessagingService: FirebaseMessagingService() {
                     //                                          int[] grantResults)
                     // to handle the case where the user grants the permission. See the documentation
                     // for ActivityCompat#requestPermissions for more details.
-                    Log.d("Messaging Service", "request Permission")
                     return
-                } else Log.d("Messaging Service", "Permission Granted")
+                }
                 notificationManagerCompat.notify(notificationId, builder.build())
             }
         }

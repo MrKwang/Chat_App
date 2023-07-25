@@ -50,7 +50,8 @@
         android:textSize="@dimen/_10ssp"
         app:layout_constraintBaseline_toBaselineOf="@+id/tvMessage"
         app:layout_constraintBottom_toBottomOf="@+id/tvMessage"
-        app:layout_constraintEnd_toEndOf="@+id/tvUsername" />
+        app:layout_constraintEnd_toEndOf="@+id/tvUsername"
+        app:layout_constraintStart_toEndOf="@+id/tvMessage" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

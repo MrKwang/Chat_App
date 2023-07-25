@@ -57,10 +57,13 @@ class ContactFragment : Fragment() {
                     val adapter = UserListAdapter(userList, object: OnItemCLickListener {
                         override fun onClick(position: Int) {
                             val intent = Intent(requireContext(), ChatActivity::class.java)
-                            intent.putExtra(Constants.KEY_NAME, userList[position].username)
-                            intent.putExtra(Constants.KEY_IMAGE, userList[position].image)
-                            intent.putExtra(Constants.KEY_RECEIVE_ID, userList[position].id)
-                            intent.putExtra(Constants.KEY_FCM_TOKEN, userList[position].token)
+                            val bundle = Bundle()
+                            bundle.putString(Constants.KEY_NAME, userList[position].username)
+                            bundle.putString(Constants.KEY_IMAGE, userList[position].image)
+                            bundle.putString(Constants.KEY_RECEIVE_ID, userList[position].id)
+                            bundle.putString(Constants.KEY_FCM_TOKEN, userList[position].token)
+
+                            intent.putExtras(bundle)
                             startActivity(intent)
 
                         }

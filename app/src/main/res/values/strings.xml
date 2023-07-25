@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Chatting App</string>
+    <string name="app_name">Chat App</string>
     <string name="create">Don\'t have an account ? <u>Create one</u> </string>
     <string name="sign">Already have an account ? <u>Sign in now</u> </string>
     <!-- TODO: Remove or change this placeholder text -->

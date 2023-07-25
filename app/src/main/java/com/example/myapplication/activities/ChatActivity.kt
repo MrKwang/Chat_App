@@ -48,8 +48,7 @@ class ChatActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        receiveId = intent.extras?.getString(Constants.KEY_USER_ID)
-            ?: intent.getStringExtra(Constants.KEY_RECEIVE_ID).toString()
+        receiveId = intent.extras?.getString(Constants.KEY_RECEIVE_ID).toString()
         imageUser = getBitmap(intent.getStringExtra(Constants.KEY_IMAGE).toString())
 
         adapter = ChatAdapter(
@@ -69,7 +68,7 @@ class ChatActivity : BaseActivity() {
         binding.rvChatScreen.setHasFixedSize(true)
         (binding.rvChatScreen.layoutManager as LinearLayoutManager).stackFromEnd =  true
         if(imageUser != null) binding.imgChatUser.setImageBitmap(imageUser)
-        binding.tvUsername.text = intent.extras?.getString(Constants.KEY_NAME) ?: intent.getStringExtra(Constants.KEY_NAME)
+        binding.tvUsername.text = intent.extras?.getString(Constants.KEY_NAME).toString()
 
     }
 
@@ -123,7 +122,7 @@ class ChatActivity : BaseActivity() {
                 val currentTime = currentMess.timeStamp.time
                 val nextTime = nextMess.timeStamp.time
                 (nextTime - currentTime) / (60 * 1000) >= 2
-            } else (nextMess.sendId == preferenceManager.getString(Constants.KEY_USER_ID.toString()))
+            } else (nextMess.sendId == preferenceManager.getString(Constants.KEY_USER_ID))
 
         }
         return result
@@ -198,8 +197,9 @@ class ChatActivity : BaseActivity() {
             conversation[Constants.KEY_USER_1_TOKEN] = preferenceManager.getString(Constants.KEY_FCM_TOKEN).toString()
             conversation[Constants.KEY_USER_2_ID] = receiveId
             conversation[Constants.KEY_USER_2_IMAGE] = intent.getStringExtra(Constants.KEY_IMAGE).toString()
-            conversation[Constants.KEY_USER_2_NAME] =  intent.extras?.getString(Constants.KEY_NAME) ?: intent.getStringExtra(Constants.KEY_NAME).toString()
-            conversation[Constants.KEY_USER_2_TOKEN] = intent.extras?.getString(Constants.KEY_FCM_TOKEN) ?: intent.getStringExtra(Constants.KEY_FCM_TOKEN).toString()
+            conversation[Constants.KEY_USER_2_NAME] = intent.extras?.getString(Constants.KEY_NAME).toString()
+            conversation[Constants.KEY_USER_2_TOKEN] =
+                intent.extras?.getString(Constants.KEY_FCM_TOKEN).toString()
             conversation[Constants.KEY_TIME] = date
             conversation[Constants.KEY_LAST_MESSAGE] = binding.edtInputMessage.text.toString()
             newConversation(conversation)
