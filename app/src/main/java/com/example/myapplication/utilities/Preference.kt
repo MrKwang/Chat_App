@@ -9,7 +9,7 @@ class Preference(){
     }
 
     fun putBoolean(key:String, value: Boolean){
-        var editor: SharedPreferences.Editor = sharedPreferences.edit()
+        val editor: SharedPreferences.Editor = sharedPreferences.edit()
         editor.putBoolean(key,value)
         editor.apply()
     }
@@ -19,7 +19,7 @@ class Preference(){
     }
 
     fun putString(key: String, value: String?){
-        var editor: SharedPreferences.Editor = sharedPreferences.edit()
+        val editor: SharedPreferences.Editor = sharedPreferences.edit()
         editor.putString(key,value)
         editor.apply()
     }
@@ -29,7 +29,7 @@ class Preference(){
     }
 
     fun clear(){
-        var editor: SharedPreferences.Editor = sharedPreferences.edit()
+        val editor: SharedPreferences.Editor = sharedPreferences.edit()
         editor.clear()
         editor.apply()
     }

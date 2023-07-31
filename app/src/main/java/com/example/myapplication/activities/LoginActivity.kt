@@ -22,9 +22,18 @@ class LoginActivity : AppCompatActivity() {
         preferenceManager = Preference(applicationContext)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
+        autoLogin()
         setListener()
 
+    }
+
+    private fun autoLogin() {
+        if(preferenceManager.getBoolean(Constants.KEY_IS_SIGNED_IN)
+        ){
+            val intent = Intent(this@LoginActivity, MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK.or(Intent.FLAG_ACTIVITY_CLEAR_TASK))
+            startActivity(intent)
+        }
     }
 
     private fun setListener() {
@@ -38,19 +47,23 @@ class LoginActivity : AppCompatActivity() {
                 login()
             }
         }
+
+        if(binding.cbRemember.isChecked){
+            preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN, true)
+        }
     }
 
     private fun checkLogin(): Boolean{
-        if (binding.edtEmail.text.toString().trim().isEmpty()){
+        return if (binding.edtEmail.text.toString().trim().isEmpty()){
             makeToast("Please enter your email!")
-            return false
+            false
         } else if(!Patterns.EMAIL_ADDRESS.matcher(binding.edtEmail.text.toString()).matches()){
             makeToast("Invalid Email!")
-            return false
+            false
         } else if(binding.edtPass.text.toString().trim().isEmpty()) {
             makeToast("Please enter your password!")
-            return false
-        } else return true
+            false
+        } else true
 
     }
 
@@ -64,7 +77,6 @@ class LoginActivity : AppCompatActivity() {
             .addOnCompleteListener {
                 if(it.isSuccessful && it.result != null && it.result.documents.size >0){
                     val documentSnapshot = it.result.documents[0]
-                    preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN, true)
                     preferenceManager.putString(Constants.KEY_USER_ID, documentSnapshot.id)
                     preferenceManager.putString(
                         Constants.KEY_NAME,

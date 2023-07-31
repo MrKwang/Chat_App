@@ -18,4 +18,5 @@
     <string name="no_conversation_yet">No conversation yet</string>
     <string name="online">Online</string>
     <string name="offline">Offline</string>
+    <string name="remember_me">Remember me</string>
 </resources>

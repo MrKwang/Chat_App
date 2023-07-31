@@ -81,6 +81,10 @@ class ChatAdapter(private var receivedBitmap: Bitmap?, private var list: Mutable
         if(prePosition != null ){
             if(getItemViewType(position) != getItemViewType(prePosition)  ){
                 layoutParams.setMargins(0,dpToPx(20,holder.itemView),0,0)
+                if (list[position].day != list[prePosition].day ) {
+                    day.visibility = View.VISIBLE
+                } else
+                    day.visibility = View.GONE
 
             } else {
                 val currentTime = list[position].timeStamp.time

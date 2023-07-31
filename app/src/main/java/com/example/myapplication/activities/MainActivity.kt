@@ -1,12 +1,19 @@
 package com.example.myapplication.activities
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Base64
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.example.myapplication.animations.ZoomOutPageTransformer
 import com.example.myapplication.apdapter.ViewPagerAdapter
@@ -32,6 +39,7 @@ class MainActivity : BaseActivity() {
         binding.viewPager2.adapter = adapter
         binding.viewPager2.setPageTransformer(ZoomOutPageTransformer())
 
+        checkPermission(Manifest.permission.POST_NOTIFICATIONS)
         setBackPress()               //back press
         setOnViewPagerChanges()      //change fragment on viewpager when navigation bar is clicked
         setOnNavigationIconChanges() //change icon menu when slide between 2 fragments
@@ -110,8 +118,33 @@ class MainActivity : BaseActivity() {
         val documentReference =  database.collection(Constants.KEY_COLLECTION_USERS).document(
             preferenceManager.getString(Constants.KEY_USER_ID).toString()
         )
-
         preferenceManager.putString(Constants.KEY_FCM_TOKEN, token)
+        val collectionRef = database.collection(Constants.KEY_COLLECTION_CONVERSATION)
+
+        collectionRef.whereEqualTo(Constants.KEY_USER_1_ID, preferenceManager.getString(Constants.KEY_USER_ID))
+            .get()
+            .addOnSuccessListener {
+                for(doc in it.documents){
+                    val id = doc.id
+                    collectionRef.document(id).update(Constants.KEY_USER_1_TOKEN, token)
+                        .addOnSuccessListener {
+                            Toast.makeText(this, "Collection Token Updated", Toast.LENGTH_SHORT).show()
+                        }
+                }
+            }
+
+        collectionRef.whereEqualTo(Constants.KEY_USER_2_ID, preferenceManager.getString(Constants.KEY_USER_ID))
+            .get()
+            .addOnSuccessListener {
+                for(doc in it.documents){
+                    val id = doc.id
+                    collectionRef.document(id).update(Constants.KEY_USER_2_TOKEN, token)
+                        .addOnSuccessListener {
+                            Toast.makeText(this, "Collection Token Updated", Toast.LENGTH_SHORT).show()
+                        }
+                }
+            }
+
         documentReference.update(Constants.KEY_FCM_TOKEN,token)
             .addOnSuccessListener {
                 Toast.makeText(this@MainActivity, "Token updated", Toast.LENGTH_SHORT).show()
@@ -124,6 +157,41 @@ class MainActivity : BaseActivity() {
 
     private fun getToken(){
         FirebaseMessaging.getInstance().token.addOnSuccessListener(this::updateToken)
+    }
+    private val requestLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+        if (it) {
+            Toast.makeText(this,"Permission Granted",Toast.LENGTH_SHORT).show()
+        } else{
+            Toast.makeText(this,"Permission Denied",Toast.LENGTH_SHORT).show()
+            showDialog()
+        }
+    }
+    private fun checkPermission(permission: String){
+        if(ActivityCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED){
+            Toast.makeText(this,"Permission Granted",Toast.LENGTH_SHORT).show()
+
+        } else{
+            requestLauncher.launch(permission)
+        }
+    }
+
+    private fun showDialog(){
+        val builder = AlertDialog.Builder(this)
+
+        builder.apply {
+            setTitle("Permission Required")
+            setMessage("Permission is needed to access to use this app")
+            setPositiveButton("Settings") { dialog, _ ->
+                dialog.cancel()
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:$packageName"))
+                startActivity(intent)
+            }
+            setNegativeButton("Cancel"){ d, _ ->
+                d.dismiss()
+            }
+        }
+
+        builder.show()
     }
 }
 

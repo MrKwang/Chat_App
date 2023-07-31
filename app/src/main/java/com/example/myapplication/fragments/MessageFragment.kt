@@ -3,6 +3,7 @@ package com.example.myapplication.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -56,10 +57,14 @@ class MessageFragment : Fragment() {
         adapter = RecentlyChatAdapter(recentList, object: OnItemCLickListener{
             override fun onClick(position: Int) {
                 val intent = Intent(requireContext().applicationContext, ChatActivity::class.java)
-                intent.putExtra(Constants.KEY_NAME, recentList[position].username)
-                intent.putExtra(Constants.KEY_RECEIVE_ID, recentList[position].id)
-                intent.putExtra(Constants.KEY_IMAGE, recentList[position].image)
-                intent.putExtra(Constants.KEY_FCM_TOKEN, recentList[position].token)
+                val bundle = Bundle()
+                bundle.putString(Constants.KEY_NAME, recentList[position].username)
+                bundle.putString(Constants.KEY_RECEIVE_ID, recentList[position].id)
+                bundle.putString(Constants.KEY_IMAGE, recentList[position].image)
+                bundle.putString(Constants.KEY_FCM_TOKEN, recentList[position].token)
+
+                Log.d("BUNDLE", bundle.toString())
+                intent.putExtras(bundle)
                 startActivity(intent)
             }
 
@@ -101,7 +106,7 @@ class MessageFragment : Fragment() {
                         val token = document.document.getString(Constants.KEY_USER_2_TOKEN).toString()
                         if (timeStamp != null) {
                             newList.add(RecentlyChatUser(name,image,id,lastMess,
-                                timeStamp, setSendTime(timeStamp), token))
+                                   timeStamp, setSendTime(timeStamp), token))
                         }
 
                     } else {
@@ -113,7 +118,7 @@ class MessageFragment : Fragment() {
                         val token = document.document.getString(Constants.KEY_USER_1_TOKEN).toString()
                         if (timeStamp != null) {
                             newList.add(RecentlyChatUser(name,image,id,lastMess,
-                                timeStamp, setSendTime(timeStamp),token))
+                                timeStamp, setSendTime(timeStamp), token))
                         }
 
 
@@ -123,9 +128,12 @@ class MessageFragment : Fragment() {
                     newList = recentList.map { it.copy() } as MutableList<RecentlyChatUser>
                     val user1 = document.document.getString(Constants.KEY_USER_1_ID)
                     val user2 = document.document.getString(Constants.KEY_USER_2_ID)
+                    val token1 = document.document.getString(Constants.KEY_USER_1_TOKEN).toString()
+                    val token2 = document.document.getString(Constants.KEY_USER_2_TOKEN).toString()
 
                     for( i in 0 until newList.size){
                         if(newList[i].id == user1 || newList[i].id == user2){
+                            newList[i].token = if(newList[i].id == user1) token1 else token2
                             newList[i].lastMess = document.document.getString(Constants.KEY_LAST_MESSAGE).toString()
                             newList[i].time = document.document.getDate(Constants.KEY_TIME)!!
                             newList[i].sendTime = setSendTime(newList[i].time)
@@ -155,11 +163,13 @@ class MessageFragment : Fragment() {
 
     private fun setSendTime(timeStamp: Date): String {
 
-        var sentTime = if(System.currentTimeMillis() - timeStamp.time <= 23*3600*1000){
+        val sentTime = if(System.currentTimeMillis() - timeStamp.time <= 23*3600*1000){
             SimpleDateFormat("HH:mm", Locale.getDefault()).format(timeStamp)
         } else{
             SimpleDateFormat("EEE", Locale.getDefault()).format(timeStamp)
         }
         return  sentTime
     }
+
+
 }
