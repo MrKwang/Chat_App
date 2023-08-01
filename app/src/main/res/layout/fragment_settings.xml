@@ -1,23 +1,236 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_width="match_parent"
     tools:context=".fragments.SettingsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:background="@color/white"
+       android:gravity="center_horizontal"
+       android:orientation="vertical" >
 
-    <Button
-        android:id="@+id/btnLogOut"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:layout_marginStart="@dimen/_15sdp"
-        android:layout_marginEnd="@dimen/_15sdp"
-        android:text="@string/log_out"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+       <de.hdodenhof.circleimageview.CircleImageView
+           android:layout_width="@dimen/_70sdp"
+           android:layout_height="@dimen/_70sdp"
+           android:layout_marginTop="@dimen/_14sdp"
+           android:background="@drawable/background_image"
+           app:civ_border_color="@color/black"
+           app:civ_border_width="@dimen/_2sdp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="@dimen/_8sdp"
+           android:text="USERNAME"
+           android:textColor="@color/text_color"
+           android:textSize="@dimen/_15ssp"
+           android:textStyle="bold" />
+
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="@dimen/_2sdp"
+           android:text="EMAIL"
+           android:textColor="@color/time_chat"
+           android:textSize="@dimen/_13ssp" />
+
+       <Button
+           android:id="@+id/btnSignUp"
+           android:layout_width="@dimen/_100sdp"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="@dimen/_13sdp"
+           android:background="@drawable/btn_login1"
+           android:text="@string/edit"
+           android:textColor="@color/white"
+           android:textSize="@dimen/_10ssp"
+           android:textStyle="bold" />
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="vertical"
+           android:layout_marginTop="@dimen/_25sdp"
+           android:layout_marginStart="@dimen/_15sdp"
+           android:layout_marginEnd="@dimen/_15sdp"
+           android:background="@drawable/background_4"
+           android:padding="@dimen/_10sdp">
+
+           <RelativeLayout
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:padding="@dimen/_10sdp">
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Darkmode"
+                   android:textStyle="bold"
+                   android:textColor="@color/setting_text"
+                   android:textSize="@dimen/_15ssp" />
+
+               <androidx.appcompat.widget.SwitchCompat
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_alignParentEnd="true" />
+
+           </RelativeLayout>
+
+           <RelativeLayout
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:padding="@dimen/_10sdp">
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Notification"
+                   android:textStyle="bold"
+                   android:textColor="@color/setting_text"
+                   android:textSize="@dimen/_15ssp" />
+
+               <androidx.appcompat.widget.SwitchCompat
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_alignParentEnd="true" />
+
+           </RelativeLayout>
+
+       </LinearLayout>
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="vertical"
+           android:layout_marginTop="@dimen/_10sdp"
+           android:layout_marginStart="@dimen/_15sdp"
+           android:layout_marginEnd="@dimen/_15sdp"
+           android:background="@drawable/background_4"
+           android:padding="@dimen/_10sdp">
+
+           <RelativeLayout
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:padding="@dimen/_10sdp">
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Term Of Uses"
+                   android:textStyle="bold"
+                   android:textColor="@color/setting_text"
+                   android:textSize="@dimen/_15ssp" />
+
+               <ImageView
+                   android:layout_width="@dimen/_25sdp"
+                   android:layout_height="@dimen/_25sdp"
+                   android:layout_alignParentEnd="true"
+                   android:src="@drawable/baseline_navigate_next_24"/>
+
+           </RelativeLayout>
+
+           <RelativeLayout
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:padding="@dimen/_10sdp">
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="FAQs"
+                   android:textStyle="bold"
+                   android:textColor="@color/setting_text"
+                   android:textSize="@dimen/_15ssp" />
+
+               <ImageView
+                   android:layout_width="@dimen/_25sdp"
+                   android:layout_height="@dimen/_25sdp"
+                   android:layout_alignParentEnd="true"
+                   android:src="@drawable/baseline_navigate_next_24"/>
+
+           </RelativeLayout>
+
+           <RelativeLayout
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:padding="@dimen/_10sdp">
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="About Us"
+                   android:textStyle="bold"
+                   android:textColor="@color/setting_text"
+                   android:textSize="@dimen/_15ssp" />
+
+               <ImageView
+                   android:layout_width="@dimen/_25sdp"
+                   android:layout_height="@dimen/_25sdp"
+                   android:layout_alignParentEnd="true"
+                   android:src="@drawable/baseline_navigate_next_24"/>
+
+           </RelativeLayout>
+
+       </LinearLayout>
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="vertical"
+           android:layout_marginTop="@dimen/_10sdp"
+           android:layout_marginStart="@dimen/_15sdp"
+           android:layout_marginEnd="@dimen/_15sdp"
+           android:layout_marginBottom="@dimen/_18sdp"
+           android:background="@drawable/background_3"
+           android:padding="@dimen/_10sdp">
+
+           <RelativeLayout
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:padding="@dimen/_10sdp">
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Delete Account"
+                   android:textStyle="bold"
+                   android:textColor="@color/red"
+                   android:textSize="@dimen/_15ssp" />
+
+               <ImageView
+                   android:layout_width="@dimen/_25sdp"
+                   android:layout_height="@dimen/_25sdp"
+                   android:layout_alignParentEnd="true"
+                   android:src="@drawable/baseline_navigate_next_24"/>
+
+           </RelativeLayout>
+
+           <RelativeLayout
+               android:id="@+id/layoutLogOut"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:padding="@dimen/_10sdp">
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Log out"
+                   android:textStyle="bold"
+                   android:textColor="@color/setting_text"
+                   android:textSize="@dimen/_15ssp" />
+
+               <ImageView
+                   android:layout_width="@dimen/_25sdp"
+                   android:layout_height="@dimen/_25sdp"
+                   android:layout_alignParentEnd="true"
+                   android:src="@drawable/baseline_navigate_next_24"/>
+
+           </RelativeLayout>
+
+       </LinearLayout>
+   </LinearLayout>
+
+</ScrollView>

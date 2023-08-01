@@ -19,4 +19,7 @@
     <string name="online">Online</string>
     <string name="offline">Offline</string>
     <string name="remember_me">Remember me</string>
+    <string name="create_your_account">CREATE YOUR ACCOUNT</string>
+    <string name="signup">SignUp</string>
+    <string name="edit">edit</string>
 </resources>

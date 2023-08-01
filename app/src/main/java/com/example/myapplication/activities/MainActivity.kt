@@ -87,7 +87,6 @@ class MainActivity : BaseActivity() {
                     0 -> binding.botNavigation.setCurrentActiveItem(0)
                     1 -> binding.botNavigation.setCurrentActiveItem(1)
                     2 -> binding.botNavigation.setCurrentActiveItem(2)
-                    3 -> binding.botNavigation.setCurrentActiveItem(3)
                     else -> binding.botNavigation.setCurrentActiveItem(0)
                 }
             }
@@ -96,12 +95,11 @@ class MainActivity : BaseActivity() {
     }
 
     private fun setOnViewPagerChanges() {
-        binding.botNavigation.setNavigationChangeListener { view, position ->
+        binding.botNavigation.setNavigationChangeListener { _, position ->
             when(position){
                 0 -> binding.viewPager2.currentItem = 0
                 1-> binding.viewPager2.currentItem = 1
                 2-> binding.viewPager2.currentItem = 2
-                3-> binding.viewPager2.currentItem = 3
                 else -> binding.viewPager2.currentItem = 0
             }
         }

@@ -22,18 +22,13 @@ class LoginActivity : AppCompatActivity() {
         preferenceManager = Preference(applicationContext)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        autoLogin()
-        setListener()
-
-    }
-
-    private fun autoLogin() {
         if(preferenceManager.getBoolean(Constants.KEY_IS_SIGNED_IN)
         ){
             val intent = Intent(this@LoginActivity, MainActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK.or(Intent.FLAG_ACTIVITY_CLEAR_TASK))
             startActivity(intent)
-        }
+        } else setListener()
+
     }
 
     private fun setListener() {
@@ -48,8 +43,10 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        if(binding.cbRemember.isChecked){
-            preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN, true)
+        binding.cbRemember.setOnClickListener {
+            if(binding.cbRemember.isChecked){
+                preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN, true)
+            }
         }
     }
 

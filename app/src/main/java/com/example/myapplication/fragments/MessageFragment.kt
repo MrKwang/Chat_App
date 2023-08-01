@@ -101,7 +101,8 @@ class MessageFragment : Fragment() {
                         val name = document.document.getString(Constants.KEY_USER_2_NAME).toString()
                         val image = document.document.getString(Constants.KEY_USER_2_IMAGE).toString()
                         val id = document.document.getString(Constants.KEY_USER_2_ID).toString()
-                        val lastMess = document.document.getString(Constants.KEY_LAST_MESSAGE).toString()
+                        val lastMess =
+                            document.document.getString(Constants.KEY_LAST_MESSAGE)?.trimStart()?.trimEnd().toString()
                         val timeStamp= document.document.getDate(Constants.KEY_TIME)
                         val token = document.document.getString(Constants.KEY_USER_2_TOKEN).toString()
                         if (timeStamp != null) {

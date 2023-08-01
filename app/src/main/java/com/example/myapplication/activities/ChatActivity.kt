@@ -182,7 +182,7 @@ class ChatActivity : BaseActivity() {
         val message: HashMap<String, Any> = HashMap()
         message[Constants.KEY_SEND_ID] = preferenceManager.getString(Constants.KEY_USER_ID).toString()
         message[Constants.KEY_RECEIVE_ID] = receiveId
-        message[Constants.KEY_MESSAGE] = binding.edtInputMessage.text.trimEnd().toString()
+        message[Constants.KEY_MESSAGE] = binding.edtInputMessage.text.trimStart().trimEnd().toString()
         message[Constants.KEY_TIME] = date
         database.collection(Constants.KEY_COLLECTION_CHAT).add(message)
 
@@ -201,7 +201,7 @@ class ChatActivity : BaseActivity() {
             conversation[Constants.KEY_USER_2_TOKEN] =
                 intent.extras?.getString(Constants.KEY_FCM_TOKEN).toString()
             conversation[Constants.KEY_TIME] = date
-            conversation[Constants.KEY_LAST_MESSAGE] = binding.edtInputMessage.text.toString()
+            conversation[Constants.KEY_LAST_MESSAGE] = binding.edtInputMessage.text.trimStart().trimEnd().toString()
             newConversation(conversation)
         }
 
@@ -214,7 +214,7 @@ class ChatActivity : BaseActivity() {
                 data.put(Constants.KEY_NAME, preferenceManager.getString(Constants.KEY_NAME))
                 data.put(Constants.KEY_USER_ID, preferenceManager.getString(Constants.KEY_USER_ID))
                 data.put(Constants.KEY_FCM_TOKEN, preferenceManager.getString(Constants.KEY_FCM_TOKEN))
-                data.put(Constants.KEY_MESSAGE, binding.edtInputMessage.text.toString())
+                data.put(Constants.KEY_MESSAGE, binding.edtInputMessage.text.trimStart().trimEnd().toString())
                 val body = JSONObject()
                 body.put(Constants.REMOTE_MSG_DATA, data)
                 body.put(Constants.REMOTE_MSG_REGISTRATION_IDS, tokens)

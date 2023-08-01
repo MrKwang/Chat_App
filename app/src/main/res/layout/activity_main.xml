@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
     tools:context=".activities.MainActivity">
 
 
@@ -12,10 +13,10 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
+        app:cardElevation="@dimen/_5sdp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:cardElevation="@dimen/_5sdp">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -37,20 +38,21 @@
                 android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toEndOf="@id/imageProfile"
                 android:layout_marginStart="@dimen/_10sdp"
-                android:text="Chat App"
+                android:layout_toEndOf="@id/imageProfile"
+                android:text="@string/app_name"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_20ssp"
                 android:textStyle="bold" />
 
             <ImageButton
                 android:id="@+id/btnAdd"
-                android:layout_marginEnd="@dimen/_3sdp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                android:layout_marginEnd="@dimen/_3sdp"
                 android:background="@drawable/bg_imgbutton"
+                android:cropToPadding="true"
                 android:padding="@dimen/_5sdp"
                 android:src="@drawable/baseline_add_24" />
         </RelativeLayout>
@@ -61,9 +63,9 @@
         android:id="@+id/viewPager2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/white"
 
-        app:layout_constraintBottom_toTopOf="@+id/bot_navigation"
+        android:background="@color/white"
+        app:layout_constraintBottom_toTopOf="@id/bot_navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -91,14 +93,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:bt_active="true"
-            app:bt_colorActive="@color/primary"
+            app:bt_colorActive="@color/white"
             app:bt_colorInactive="@color/bottom_bar_color"
-            app:bt_icon="@drawable/baseline_message_24"
+            app:bt_icon="@drawable/chat_frag"
+            app:bt_iconHeight="@dimen/_20sdp"
+            app:bt_iconWidth="@dimen/_20sdp"
+            app:bt_padding="@dimen/_12sdp"
+            app:bt_shape="@drawable/bt_background"
             app:bt_title="Chats"
-            app:bt_titlePadding="@dimen/_5sdp"
+            app:bt_titlePadding="@dimen/_10sdp"
+            app:bt_titleSize="@dimen/_12ssp"
 
             app:layout_constraintBottom_toBottomOf="@+id/bot_navigation"
-            app:layout_constraintLeft_toLeftOf="@+id/bot_navigation"
+            app:layout_constraintEnd_toStartOf="@+id/icon_contact"
+            app:layout_constraintStart_toStartOf="@id/bot_navigation"
             app:layout_constraintTop_toTopOf="@id/bot_navigation" />
 
         <com.gauravk.bubblenavigation.BubbleToggleView
@@ -106,30 +114,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:bt_active="true"
-            app:bt_colorActive="@color/primary"
+            app:bt_colorActive="@color/white"
             app:bt_colorInactive="@color/bottom_bar_color"
-            app:bt_icon="@drawable/baseline_contacts_24"
+            app:bt_icon="@drawable/contacts_frag"
+            app:bt_iconHeight="@dimen/_20sdp"
+            app:bt_iconWidth="@dimen/_20sdp"
+            app:bt_padding="@dimen/_12sdp"
+            app:bt_shape="@drawable/bt_background"
             app:bt_title="Contacts"
+            app:bt_titlePadding="@dimen/_10sdp"
+            app:bt_titleSize="@dimen/_12ssp"
 
-            app:layout_constraintBottom_toBottomOf="@id/bot_navigation"
-            app:layout_constraintEnd_toStartOf="@+id/icon_profile"
-            app:layout_constraintStart_toEndOf="@+id/icon_mess"
-            app:layout_constraintTop_toTopOf="@id/bot_navigation" />
-
-        <com.gauravk.bubblenavigation.BubbleToggleView
-            android:id="@+id/icon_profile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:bt_active="true"
-            app:bt_colorActive="@color/primary"
-            app:bt_colorInactive="@color/bottom_bar_color"
-            app:bt_icon="@drawable/baseline_person_24"
-            app:bt_shape="@drawable/transition_background_drawable"
-            app:bt_title="Profile"
             app:layout_constraintBottom_toBottomOf="@id/bot_navigation"
             app:layout_constraintEnd_toStartOf="@id/icon_settings"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/icon_contact"
+            app:layout_constraintStart_toEndOf="@+id/icon_mess"
             app:layout_constraintTop_toTopOf="@id/bot_navigation" />
 
         <com.gauravk.bubblenavigation.BubbleToggleView
@@ -137,15 +135,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:bt_active="true"
-            app:bt_colorActive="@color/primary"
+            app:bt_colorActive="@color/white"
             app:bt_colorInactive="@color/bottom_bar_color"
-            app:bt_icon="@drawable/baseline_settings_24"
-            app:bt_shape="@drawable/transition_background_drawable"
+            app:bt_icon="@drawable/settings_frag"
+            app:bt_iconHeight="@dimen/_20sdp"
+            app:bt_iconWidth="@dimen/_20sdp"
+            app:bt_padding="@dimen/_12sdp"
+            app:bt_shape="@drawable/bt_background"
             app:bt_title="Settings"
+            app:bt_titlePadding="@dimen/_10sdp"
+            app:bt_titleSize="@dimen/_12ssp"
+
             app:layout_constraintBottom_toBottomOf="@id/bot_navigation"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/icon_profile"
+            app:layout_constraintStart_toEndOf="@+id/icon_contact"
             app:layout_constraintTop_toTopOf="@id/bot_navigation" />
 
     </com.gauravk.bubblenavigation.BubbleNavigationConstraintView>
