@@ -65,6 +65,8 @@ class SignUpActivity : AppCompatActivity() {
         database.collection(Constants.KEY_COLLECTION_USERS)
             .add(user)
             .addOnSuccessListener {
+                preferenceManager.putString(Constants.KEY_EMAIL, binding.edtEmail.text.toString())
+                preferenceManager.putString(Constants.KEY_PASSWORD, binding.edtPass.text.toString())
                 preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN,true)
                 preferenceManager.putString(Constants.KEY_USER_ID,it.id)
                 preferenceManager.putString(Constants.KEY_IMAGE, encodedImage)

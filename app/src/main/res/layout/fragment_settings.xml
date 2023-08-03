@@ -14,14 +14,16 @@
        android:orientation="vertical" >
 
        <de.hdodenhof.circleimageview.CircleImageView
+           android:id="@+id/civUser"
            android:layout_width="@dimen/_70sdp"
            android:layout_height="@dimen/_70sdp"
            android:layout_marginTop="@dimen/_14sdp"
            android:background="@drawable/background_image"
-           app:civ_border_color="@color/black"
+           app:civ_border_color="@color/bottom_bar_color"
            app:civ_border_width="@dimen/_2sdp" />
 
        <TextView
+           android:id="@+id/tvUsername"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:layout_marginTop="@dimen/_8sdp"
@@ -31,6 +33,7 @@
            android:textStyle="bold" />
 
        <TextView
+           android:id="@+id/tvEmail"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:layout_marginTop="@dimen/_2sdp"
@@ -39,7 +42,7 @@
            android:textSize="@dimen/_13ssp" />
 
        <Button
-           android:id="@+id/btnSignUp"
+           android:id="@+id/btnEdit"
            android:layout_width="@dimen/_100sdp"
            android:layout_height="wrap_content"
            android:layout_marginTop="@dimen/_13sdp"
@@ -60,9 +63,10 @@
            android:padding="@dimen/_10sdp">
 
            <RelativeLayout
+               android:id="@+id/layout_darkMode"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:padding="@dimen/_10sdp">
+               android:padding="@dimen/_5sdp">
 
                <TextView
                    android:layout_width="wrap_content"
@@ -70,7 +74,7 @@
                    android:text="Darkmode"
                    android:textStyle="bold"
                    android:textColor="@color/setting_text"
-                   android:textSize="@dimen/_15ssp" />
+                   android:textSize="@dimen/_12ssp" />
 
                <androidx.appcompat.widget.SwitchCompat
                    android:layout_width="wrap_content"
@@ -80,9 +84,10 @@
            </RelativeLayout>
 
            <RelativeLayout
+               android:id="@+id/layout_noti"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:padding="@dimen/_10sdp">
+               android:padding="@dimen/_5sdp">
 
                <TextView
                    android:layout_width="wrap_content"
@@ -90,7 +95,7 @@
                    android:text="Notification"
                    android:textStyle="bold"
                    android:textColor="@color/setting_text"
-                   android:textSize="@dimen/_15ssp" />
+                   android:textSize="@dimen/_12ssp" />
 
                <androidx.appcompat.widget.SwitchCompat
                    android:layout_width="wrap_content"
@@ -114,7 +119,7 @@
            <RelativeLayout
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:padding="@dimen/_10sdp">
+               android:padding="@dimen/_5sdp">
 
                <TextView
                    android:layout_width="wrap_content"
@@ -122,7 +127,7 @@
                    android:text="Term Of Uses"
                    android:textStyle="bold"
                    android:textColor="@color/setting_text"
-                   android:textSize="@dimen/_15ssp" />
+                   android:textSize="@dimen/_12ssp" />
 
                <ImageView
                    android:layout_width="@dimen/_25sdp"
@@ -135,7 +140,7 @@
            <RelativeLayout
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:padding="@dimen/_10sdp">
+               android:padding="@dimen/_5sdp">
 
                <TextView
                    android:layout_width="wrap_content"
@@ -143,7 +148,7 @@
                    android:text="FAQs"
                    android:textStyle="bold"
                    android:textColor="@color/setting_text"
-                   android:textSize="@dimen/_15ssp" />
+                   android:textSize="@dimen/_12ssp" />
 
                <ImageView
                    android:layout_width="@dimen/_25sdp"
@@ -156,7 +161,7 @@
            <RelativeLayout
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:padding="@dimen/_10sdp">
+               android:padding="@dimen/_5sdp">
 
                <TextView
                    android:layout_width="wrap_content"
@@ -164,7 +169,7 @@
                    android:text="About Us"
                    android:textStyle="bold"
                    android:textColor="@color/setting_text"
-                   android:textSize="@dimen/_15ssp" />
+                   android:textSize="@dimen/_12ssp" />
 
                <ImageView
                    android:layout_width="@dimen/_25sdp"
@@ -188,9 +193,10 @@
            android:padding="@dimen/_10sdp">
 
            <RelativeLayout
+               android:id="@+id/layout_deleteAcc"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:padding="@dimen/_10sdp">
+               android:padding="@dimen/_6sdp">
 
                <TextView
                    android:layout_width="wrap_content"
@@ -198,7 +204,7 @@
                    android:text="Delete Account"
                    android:textStyle="bold"
                    android:textColor="@color/red"
-                   android:textSize="@dimen/_15ssp" />
+                   android:textSize="@dimen/_14ssp" />
 
                <ImageView
                    android:layout_width="@dimen/_25sdp"
@@ -212,7 +218,7 @@
                android:id="@+id/layoutLogOut"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:padding="@dimen/_10sdp">
+               android:padding="@dimen/_6sdp">
 
                <TextView
                    android:layout_width="wrap_content"
@@ -220,7 +226,7 @@
                    android:text="Log out"
                    android:textStyle="bold"
                    android:textColor="@color/setting_text"
-                   android:textSize="@dimen/_15ssp" />
+                   android:textSize="@dimen/_14ssp" />
 
                <ImageView
                    android:layout_width="@dimen/_25sdp"

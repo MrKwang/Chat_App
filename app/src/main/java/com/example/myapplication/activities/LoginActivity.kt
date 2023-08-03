@@ -46,7 +46,8 @@ class LoginActivity : AppCompatActivity() {
         binding.cbRemember.setOnClickListener {
             if(binding.cbRemember.isChecked){
                 preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN, true)
-            }
+            } else
+                preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN, false)
         }
     }
 
@@ -74,6 +75,8 @@ class LoginActivity : AppCompatActivity() {
             .addOnCompleteListener {
                 if(it.isSuccessful && it.result != null && it.result.documents.size >0){
                     val documentSnapshot = it.result.documents[0]
+                    preferenceManager.putString(Constants.KEY_EMAIL, binding.edtEmail.text.toString())
+                    preferenceManager.putString(Constants.KEY_PASSWORD, binding.edtPass.text.toString())
                     preferenceManager.putString(Constants.KEY_USER_ID, documentSnapshot.id)
                     preferenceManager.putString(
                         Constants.KEY_NAME,
